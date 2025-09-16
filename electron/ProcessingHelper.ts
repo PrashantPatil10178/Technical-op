@@ -549,6 +549,7 @@ export class ProcessingHelper {
 
       // Step 1: Extract problem info using AI Vision API (OpenAI or Gemini)
       const imageDataList = screenshots.map((screenshot) => screenshot.data);
+      const maxTokens = language === 'html' ? 8192 : 4000;
 
       // Update the user on progress
       if (mainWindow) {
@@ -601,7 +602,7 @@ export class ProcessingHelper {
           await this.openaiClient.chat.completions.create({
             model: config.extractionModel || "gpt-4o",
             messages: messages,
-            max_tokens: 4000,
+            max_tokens: maxTokens,
             temperature: 0.2,
           });
 
@@ -656,6 +657,7 @@ export class ProcessingHelper {
               contents: geminiMessages,
               generationConfig: {
                 temperature: 0.2,
+                maxOutputTokens: maxTokens,
               },
             },
             { signal }
@@ -724,7 +726,7 @@ export class ProcessingHelper {
 
           const response = await this.anthropicClient.messages.create({
             model: config.extractionModel || "claude-3-7-sonnet-20250219",
-            max_tokens: 4000,
+            max_tokens: maxTokens,
             messages: messages,
             temperature: 0.2,
           });
@@ -865,7 +867,7 @@ export class ProcessingHelper {
 
       // Create prompt for solution generation
       const languageInstructions = language === 'html'
-        ? 'LANGUAGE: HTML/CSS/JS. Provide a complete, runnable solution in a single HTML file. The HTML file must include a <!DOCTYPE html> declaration, a <head> section with a <title> and a <style> tag for the CSS, and a <body> section with the HTML content and a <script> tag for the JavaScript. Ensure the code is well-structured and functional.'
+        ? 'You are an expert web developer. Provide a complete, runnable solution in a single HTML file. The HTML file must include a <!DOCTYPE html> declaration, a <head> with a <title> and a <style> tag for CSS, and a <body> with the HTML content and a <script> tag for JavaScript. Ensure the code is well-structured, functional, and visually appealing.'
         : `LANGUAGE: ${language}`;
 
       const promptText = `
@@ -889,9 +891,10 @@ I need the response in the following format:
 1. Code: A clean, optimized implementation in the specified language.
 2. Your Thoughts: A list of key insights and reasoning behind your approach.
 
-Your solution should be efficient, well-commented, and handle edge cases.
+Your solution should be efficient, handle edge cases, and not include any comments in the code.
 `;
 
+const maxTokens = language === 'html' ? 8192 : 4000;
       let responseContent;
 
       if (config.apiProvider === "openai") {
@@ -915,7 +918,7 @@ Your solution should be efficient, well-commented, and handle edge cases.
               },
               { role: "user", content: promptText },
             ],
-            max_tokens: 4000,
+            max_tokens: maxTokens,
             temperature: 0.2,
           });
 
@@ -951,7 +954,7 @@ Your solution should be efficient, well-commented, and handle edge cases.
               contents: geminiMessages,
               generationConfig: {
                 temperature: 0.2,
-                maxOutputTokens: 4000,
+                maxOutputTokens: maxTokens,
               },
             },
             { signal }
@@ -1010,7 +1013,7 @@ Your solution should be efficient, well-commented, and handle edge cases.
           // Send to Anthropic API
           const response = await this.anthropicClient.messages.create({
             model: config.solutionModel || "claude-3-7-sonnet-20250219",
-            max_tokens: 4000,
+            max_tokens: maxTokens,
             messages: messages,
             temperature: 0.2,
           });
@@ -1138,6 +1141,7 @@ Your solution should be efficient, well-commented, and handle edge cases.
 
       // Prepare the images for the API call
       const imageDataList = screenshots.map((screenshot) => screenshot.data);
+      const maxTokens = language === 'html' ? 8192 : 4000;
 
       let debugContent;
 
@@ -1201,7 +1205,7 @@ If you include code examples, use proper markdown code blocks with language spec
         const debugResponse = await this.openaiClient.chat.completions.create({
           model: config.debuggingModel || "gpt-4o",
           messages: messages,
-          max_tokens: 4000,
+          max_tokens: maxTokens,
           temperature: 0.2,
         });
 
@@ -1270,7 +1274,7 @@ If you include code examples, use proper markdown code blocks with language spec
               contents: geminiMessages,
               generationConfig: {
                 temperature: 0.2,
-                maxOutputTokens: 4000,
+                maxOutputTokens: maxTokens,
               },
             },
             { signal }
@@ -1367,7 +1371,7 @@ If you include code examples, use proper markdown code blocks with language spec
 
           const response = await this.anthropicClient.messages.create({
             model: config.debuggingModel || "claude-3-7-sonnet-20250219",
-            max_tokens: 4000,
+            max_tokens: maxTokens,
             messages: messages,
             temperature: 0.2,
           });

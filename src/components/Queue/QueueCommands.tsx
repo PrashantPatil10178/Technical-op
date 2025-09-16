@@ -157,6 +157,10 @@ const QueueCommands: React.FC<QueueCommandsProps> = ({
             </div>
           )}
           {/* Screenshot */}
+          <LanguageSelector
+            currentLanguage={currentLanguage}
+            setLanguage={setLanguage}
+          />
           <div
             className="flex items-center gap-2 cursor-pointer rounded px-2 py-1.5 hover:bg-white/10 transition-colors"
             onClick={async () => {

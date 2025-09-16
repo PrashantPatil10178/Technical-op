@@ -43,7 +43,7 @@ export const LanguageSelector: React.FC<LanguageSelectorProps> = ({
           <option value="python" className="bg-black text-white">Python</option>
           <option value="javascript" className="bg-black text-white">JavaScript</option>
           <option value="java" className="bg-black text-white">Java</option>
-          <option value="golang" className="bg-black text-white">Go</option>
+          <option value="go" className="bg-black text-white">Go</option>
           <option value="cpp" className="bg-black text-white">C++</option>
           <option value="swift" className="bg-black text-white">Swift</option>
           <option value="kotlin" className="bg-black text-white">Kotlin</option>
@@ -51,6 +51,9 @@ export const LanguageSelector: React.FC<LanguageSelectorProps> = ({
           <option value="sql" className="bg-black text-white">SQL</option>
           <option value="r" className="bg-black text-white">R</option>
           <option value="csharp" className="bg-black text-white">C#</option>
+          <option value="html" className="bg-black text-white">HTML</option>
+          <option value="typescript" className="bg-black text-white">TypeScript</option>
+          <option value="rust" className="bg-black text-white">Rust</option>
         </select>
       </div>
     </div>
